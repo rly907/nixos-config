@@ -7,6 +7,8 @@ let
       nvim = "nvim";
       niri = "niri";
       kitty = "kitty";
+      waybar = "waybar";
+      fuzzel = "fuzzel";
     };
 in 
 
@@ -18,10 +20,10 @@ in
     ./modules/niri.nix
     ];
 
-    progams.git = {
+    programs.git = {
         enable = true;
         userName = "Riley";
-        userEmail = "rly907@gmail.com"
+        userEmail = "rly907@gmail.com";
       };
 
     home.username = "rly907";

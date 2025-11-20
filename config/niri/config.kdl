@@ -6,6 +6,15 @@
 // Input device configuration.
 // Find the full list of options on the wiki:
 // https://yalter.github.io/niri/Configuration:-Input
+
+
+spawn-at-startup "swww-daemon"
+spawn-at-startup "waybar"
+spawn-at-startup "swayosd-server"
+
+
+
+
 input {
     keyboard {
         xkb {
@@ -66,7 +75,7 @@ input {
 
     // Focus windows and outputs automatically when moving the mouse into them.
     // Setting max-scroll-amount="0%" makes it work only on windows already fully on screen.
-    // focus-follows-mouse max-scroll-amount="0%"
+    focus-follows-mouse max-scroll-amount="0%"
 }
 
 // You can configure outputs by their name, which you can find
@@ -112,6 +121,7 @@ input {
 layout {
     // Set gaps around windows in logical pixels.
     gaps 16
+    background-color "transparent"
 
     // When to center a column when changing focus, options are:
     // - "never", default behavior, focusing an off-screen column will keep at the left
@@ -268,7 +278,6 @@ layout {
 // See the binds section below for more spawn examples.
 
 // This line starts waybar, a commonly used bar for Wayland compositors.
-spawn-at-startup "waybar"
 
 // To run a shell command (with variables, pipes, etc.), use spawn-sh-at-startup:
 // spawn-sh-at-startup "qs -c ~/source/qs/MyAwesomeShell"
@@ -323,7 +332,7 @@ window-rule {
     // This app-id regular expression will work for both:
     // - host Firefox (app-id is "firefox")
     // - Flatpak Firefox (app-id is "org.mozilla.firefox")
-    match app-id=r#"firefox$"# title="^Picture-in-Picture$"
+    match app-id=r#"floorp$"# title="^Picture-in-Picture$"
     open-floating true
 }
 
@@ -341,10 +350,49 @@ window-rule {
 
 // Example: enable rounded corners for all windows.
 // (This example rule is commented out with a "/-" in front.)
-/-window-rule {
+window-rule {
     geometry-corner-radius 12
     clip-to-geometry true
 }
+window-rule{
+    match is-focused=false
+    opacity 0.9
+}
+
+window-rule {
+  match app-id=r#"floorp$"#
+  match app-id=r#"waypaper$"#
+  match app-id=r#"Cider$"#
+  match app-id="Code - Insiders"
+  match app-id="Cursor"
+  match app-id="equibop"
+
+  open-maximized true
+}
+
+window-rule {
+    match app-id=r#"blueman-manager$"#
+    open-floating true
+    default-floating-position x=10 y=10 relative-to="top-right"
+
+    min-width 300
+    max-width 300
+    min-height 400
+    max-height 400
+
+}
+
+layer-rule{
+  match namespace="^swww-daemon$"
+
+  place-within-backdrop true
+}
+overview {
+    workspace-shadow {
+        off
+    }
+}
+
 
 binds {
     // Keys consist of modifiers separated by + signs, followed by an XKB key name
@@ -363,9 +411,11 @@ binds {
 
     // Suggested binds for running programs: terminal, app launcher, screen locker.
     Mod+Q hotkey-overlay-title="Open a Terminal: kitty" { spawn "kitty"; }
-    Mod+D hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
-    Super+Alt+L hotkey-overlay-title="Lock the Screen: swaylock" { spawn "swaylock"; }
-
+    Mod+Space hotkey-overlay-title="Run an Application: fuzzel" { spawn "fuzzel"; }
+    Mod+E hotkey-overlay-title="Run File Explorer: dolphin" {spawn "dolphin";}
+    Mod+D hotkey-overlay-title="Open Web Browser: floorp" {spawn "floorp";}
+    Super+Alt+L hotkey-overlay-title="Lock the Screen: hyprlock" { spawn "hyprlock"; }
+    
     // Use spawn-sh to run a shell command. Do this if you need pipes, multiple commands, etc.
     // Note: the entire command goes as a single argument. It's passed verbatim to `sh -c`.
     // For example, this is a standard bind to toggle the screen reader (orca).
@@ -382,8 +432,8 @@ binds {
     // Example brightness key mappings for brightnessctl.
     // You can use regular spawn with multiple arguments too (to avoid going through "sh"),
     // but you need to manually put each argument in separate "" quotes.
-    XF86MonBrightnessUp allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "+10%"; }
-    XF86MonBrightnessDown allow-when-locked=true { spawn "brightnessctl" "--class=backlight" "set" "10%-"; }
+    XF86MonBrightnessUp allow-when-locked=true { spawn-sh "swayosd-client --brightness raise"; }
+    XF86MonBrightnessDown allow-when-locked=true { spawn-sh "swayosd-client --brightness lower"; }
 
     // Open/close the Overview: a zoomed-out view of workspaces and windows.
     // You can also move the mouse into the top-left hot corner,
