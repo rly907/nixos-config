@@ -38,6 +38,7 @@
 
   programs.niri.enable = true;
   programs.fish.enable = true;
+  # programs.nixvim.enable = true;
 
   environment.systemPackages = with pkgs; [
     vim

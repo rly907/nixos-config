@@ -16,7 +16,7 @@ in
 {
 
     imports = [
-    ./modules/neovim.nix
+    ./modules/nixvim.nix
     ./modules/niri.nix
     ];
 
