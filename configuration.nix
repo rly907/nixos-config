@@ -11,7 +11,8 @@
   boot.loader.efi.canTouchEfiVariables = true;
 
   networking.hostName = "nixos-btw";
-  networking.networkmanager.enable = true;
+	networking.wireless.iwd.enable = true;
+	# networking.networkmanager.wifi.macAddress = "permanent";
   time.timeZone = "America/Denver";
 
 
